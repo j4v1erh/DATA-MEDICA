@@ -1,0 +1,13 @@
+/* style.css: retoques sencillos para que se vea más limpio */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+h1, h4, h3 {
+  color: #1f2933;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
