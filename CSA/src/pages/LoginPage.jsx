@@ -89,7 +89,7 @@ export default function LoginPage() {
               </div>
 
               <p className="mt-6 text-center text-xs text-slate-400">
-                © {new Date().getFullYear()} DATA MÉDICA. Acceso controlado.
+                © {new Date().getFullYear()} Clinica San Agustin - Cardenas, Tab. Acceso controlado.
               </p>
             </div>
           </div>
