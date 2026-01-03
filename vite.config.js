@@ -4,5 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/CSA/",
+  base: "/DATA-MEDICA/",
+  build: {
+    outDir: "docs",
+    emptyOutDir: true,
+  },
 });
