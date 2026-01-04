@@ -65,6 +65,10 @@ export default function PatientRecordPanelPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ✅ contador de historias clínicas guardadas
+  const [hcCount, setHcCount] = useState(null);
+  const [hcCountError, setHcCountError] = useState("");
+
   useEffect(() => {
     let alive = true;
 
@@ -101,6 +105,43 @@ export default function PatientRecordPanelPage() {
     };
   }, [patientId]);
 
+  // ✅ cargar contador de historias clínicas
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      setHcCount(null);
+      setHcCountError("");
+
+      try {
+        // si no hay sesión, no hacemos queries extra
+        if (!session?.user?.id) return;
+
+        const { count, error } = await supabase
+          .from("clinical_histories")
+          .select("id", { count: "exact", head: true })
+          .eq("patient_id", patientId);
+
+        if (!alive) return;
+
+        if (error) {
+          setHcCountError(error.message);
+          setHcCount(null);
+        } else {
+          setHcCount(count ?? 0);
+        }
+      } catch (e) {
+        if (!alive) return;
+        setHcCountError(e?.message || "No se pudo contar historias clínicas.");
+        setHcCount(null);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, [patientId, session?.user?.id]);
+
   const email = session?.user?.email ?? "usuario";
 
   const patientName = (patient?.full_name || "").trim();
@@ -108,6 +149,9 @@ export default function PatientRecordPanelPage() {
   const patientPhone = patient?.phone || "—";
   const patientSex = patient?.sex || "—";
   const patientAge = patient?.age ?? "—";
+
+  const goNewHC = () => navigate(`/expediente/${patientId}/historia-clinica/nueva`);
+  const goViewHC = () => navigate(`/expediente/${patientId}/historia-clinica/ver`);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100">
@@ -135,9 +179,24 @@ export default function PatientRecordPanelPage() {
               Cambiar paciente
             </button>
 
+            {/* ✅ accesos directos */}
+            <button
+              onClick={goNewHC}
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-white/20 hover:bg-white/10"
+            >
+              + Nueva Historia Clínica
+            </button>
+
+            <button
+              onClick={goViewHC}
+              className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-200 transition hover:bg-emerald-500/15"
+            >
+              Ver Historias Clínicas
+            </button>
+
             <button
               onClick={() => setOpenMenu(true)}
-              className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-200 transition hover:bg-emerald-500/15"
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-white/20 hover:bg-white/10"
             >
               Abrir formatos
             </button>
@@ -168,8 +227,27 @@ export default function PatientRecordPanelPage() {
                   <InfoPill label="Tel" value={patientPhone} />
                   <InfoPill label="Sexo" value={patientSex} />
                   <InfoPill label="Edad" value={String(patientAge)} />
+                  <InfoPill
+                    label="Historias clínicas"
+                    value={
+                      hcCountError
+                        ? "—"
+                        : hcCount === null
+                        ? "Cargando…"
+                        : String(hcCount)
+                    }
+                  />
                 </div>
               </div>
+
+              {hcCountError && (
+                <div className="mt-3 text-xs text-amber-200">
+                  No se pudo contar historias clínicas: {hcCountError}
+                  <div className="text-slate-300">
+                    (Si no existe la tabla o RLS bloquea, esto es normal. La vista puede seguir funcionando si tu SELECT lo permite.)
+                  </div>
+                </div>
+              )}
 
               <div className="mt-4 text-xs text-slate-400">
                 ID interno: <span className="text-slate-300">{patient.id}</span>
@@ -197,10 +275,7 @@ export default function PatientRecordPanelPage() {
             title="2. Ver"
             description="Consultar registros existentes del paciente (historial y formatos guardados)."
             meta="CONSULTA"
-            onClick={() => {
-              // Placeholder: aquí luego ponemos /expediente/:patientId/ver
-              setOpenMenu(true);
-            }}
+            onClick={goViewHC}
           />
 
           <ActionCard
@@ -209,8 +284,7 @@ export default function PatientRecordPanelPage() {
             meta="ADMIN"
             disabled={!isAdmin}
             onClick={() => {
-              // Placeholder
-              setOpenMenu(true);
+              alert("Editar (Admin): pendiente de implementar.");
             }}
           />
 
@@ -229,8 +303,9 @@ export default function PatientRecordPanelPage() {
         <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-slate-300">
           <div className="font-medium text-slate-100">Siguiente paso</div>
           <p className="mt-2">
-            Ahora conectamos el módulo <span className="font-medium text-slate-100">Ver</span> para listar registros
-            guardados por tipo (historia/nota/pre/post/indicaciones/labs) y aplicar permisos por rol.
+            Ya quedó conectado el botón <span className="font-medium text-slate-100">Ver</span> a
+            <span className="font-medium text-slate-100"> Historia Clínica</span>. Luego hacemos lo mismo para Nota Médica,
+            Pre/Post/Transoperatoria, Indicaciones y Labs.
           </p>
         </div>
       </div>

@@ -8,11 +8,11 @@ import HomePage from "./pages/HomePage.jsx";
 import PatientsPage from "./pages/PatientsPage.jsx";
 import PatientCreatePage from "./pages/PatientCreatePage.jsx";
 
-// ✅ EXPEDIENTE CLÍNICO (páginas que debes tener en src/pages/)
+// ✅ EXPEDIENTE CLÍNICO
 import ClinicalRecordSelectPage from "./pages/ClinicalRecordSelectPage.jsx";
 import PatientRecordPanelPage from "./pages/PatientRecordPanelPage.jsx";
 
-// ✅ FORMULARIOS (están en src/pages/)
+// ✅ FORMULARIOS
 import HistoriaClinicaFormPage from "./pages/HistoriaClinicaFormPage.jsx";
 import NotaMedicaFormPage from "./pages/NotaMedicaFormPage.jsx";
 import PreoperatoriaFormPage from "./pages/PreoperatoriaFormPage.jsx";
@@ -20,6 +20,9 @@ import TransoperatoriaFormPage from "./pages/TransoperatoriaFormPage.jsx";
 import PostoperatoriaFormPage from "./pages/PostoperatoriaFormPage.jsx";
 import IndicacionesIngresoFormPage from "./pages/IndicacionesIngresoFormPage.jsx";
 import LaboratoriosImagenFormPage from "./pages/LaboratoriosImagenFormPage.jsx";
+
+// ✅ VER HISTORIAL (NUEVO)
+import HistoriaClinicaViewPage from "./pages/HistoriaClinicaViewPage.jsx";
 
 export default function App() {
   return (
@@ -76,7 +79,7 @@ export default function App() {
         />
 
         {/* =========================
-            ✅ FORMULARIOS POR PACIENTE
+            ✅ HISTORIA CLÍNICA (NUEVA + VER)
         ========================= */}
         <Route
           path="/expediente/:patientId/historia-clinica/nueva"
@@ -87,6 +90,19 @@ export default function App() {
           }
         />
 
+        {/* ✅ VER HISTORIAL DE HISTORIAS CLÍNICAS (NUEVO) */}
+        <Route
+          path="/expediente/:patientId/historia-clinica/ver"
+          element={
+            <ProtectedRoute>
+              <HistoriaClinicaViewPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =========================
+            ✅ OTROS FORMULARIOS
+        ========================= */}
         <Route
           path="/expediente/:patientId/nota-medica/nueva"
           element={
