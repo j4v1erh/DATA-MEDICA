@@ -19,9 +19,11 @@ function ActionCard({ title, description, meta, onClick, disabled }) {
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       className={`group w-full rounded-3xl border p-6 text-left shadow-2xl shadow-black/40 backdrop-blur transition
-        ${disabled
-          ? "border-white/10 bg-white/5 opacity-50 cursor-not-allowed"
-          : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"}
+        ${
+          disabled
+            ? "border-white/10 bg-white/5 opacity-50 cursor-not-allowed"
+            : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+        }
       `}
     >
       <div className="flex items-start justify-between gap-4">
@@ -101,6 +103,12 @@ export default function PatientRecordPanelPage() {
 
   const email = session?.user?.email ?? "usuario";
 
+  const patientName = (patient?.full_name || "").trim();
+  const patientCurp = patient?.curp || "—";
+  const patientPhone = patient?.phone || "—";
+  const patientSex = patient?.sex || "—";
+  const patientAge = patient?.age ?? "—";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100">
       <div className="mx-auto max-w-6xl px-4 py-10">
@@ -149,17 +157,17 @@ export default function PatientRecordPanelPage() {
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
                   <div className="text-lg font-semibold text-slate-100">
-                    {patient.nombre ?? ""} {patient.apellido ?? ""}
+                    {patientName || "Sin nombre"}
                   </div>
                   <div className="mt-1 text-sm text-slate-300">
-                    CURP: <span className="text-slate-100">{patient.curp || "—"}</span>
+                    CURP: <span className="text-slate-100">{patientCurp}</span>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <InfoPill label="Tel" value={patient.telefono || patient.phone || "—"} />
-                  <InfoPill label="Sexo" value={patient.sexo || "—"} />
-                  <InfoPill label="Edad" value={patient.edad || "—"} />
+                  <InfoPill label="Tel" value={patientPhone} />
+                  <InfoPill label="Sexo" value={patientSex} />
+                  <InfoPill label="Edad" value={String(patientAge)} />
                 </div>
               </div>
 
@@ -191,7 +199,6 @@ export default function PatientRecordPanelPage() {
             meta="CONSULTA"
             onClick={() => {
               // Placeholder: aquí luego ponemos /expediente/:patientId/ver
-              // Por ahora abrimos menú para capturar rápido.
               setOpenMenu(true);
             }}
           />
@@ -202,7 +209,7 @@ export default function PatientRecordPanelPage() {
             meta="ADMIN"
             disabled={!isAdmin}
             onClick={() => {
-              // Placeholder: aquí luego ponemos /expediente/:patientId/editar
+              // Placeholder
               setOpenMenu(true);
             }}
           />
@@ -213,8 +220,6 @@ export default function PatientRecordPanelPage() {
             meta="ADMIN"
             disabled={!isAdmin}
             onClick={() => {
-              // Placeholder: aquí luego ponemos /expediente/:patientId/eliminar
-              // (y confirmación doble)
               alert("Eliminar (Admin): pendiente de implementar con confirmación.");
             }}
           />
