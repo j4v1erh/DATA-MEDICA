@@ -86,9 +86,9 @@ const go = (path) => navigate(path);
           />
           <ActionCard
             title="Expediente clínico"
-            description="Notas médicas, evolución, diagnósticos, antecedentes y exploración física."
+            description="Historia clinica, notas medicas, evolucion, diagnosticos, plan."
             meta="EHR"
-            onClick={() => go("/ehr")}
+            onClick={() => go("/expediente")}
           />
           <ActionCard
             title="Recetas y órdenes"

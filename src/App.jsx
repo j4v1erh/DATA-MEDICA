@@ -8,6 +8,19 @@ import HomePage from "./pages/HomePage.jsx";
 import PatientsPage from "./pages/PatientsPage.jsx";
 import PatientCreatePage from "./pages/PatientCreatePage.jsx";
 
+// ✅ EXPEDIENTE CLÍNICO (páginas que debes tener en src/pages/)
+import ClinicalRecordSelectPage from "./pages/ClinicalRecordSelectPage.jsx";
+import PatientRecordPanelPage from "./pages/PatientRecordPanelPage.jsx";
+
+// ✅ FORMULARIOS (están en src/pages/)
+import HistoriaClinicaFormPage from "./pages/HistoriaClinicaFormPage.jsx";
+import NotaMedicaFormPage from "./pages/NotaMedicaFormPage.jsx";
+import PreoperatoriaFormPage from "./pages/PreoperatoriaFormPage.jsx";
+import TransoperatoriaFormPage from "./pages/TransoperatoriaFormPage.jsx";
+import PostoperatoriaFormPage from "./pages/PostoperatoriaFormPage.jsx";
+import IndicacionesIngresoFormPage from "./pages/IndicacionesIngresoFormPage.jsx";
+import LaboratoriosImagenFormPage from "./pages/LaboratoriosImagenFormPage.jsx";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -37,6 +50,93 @@ export default function App() {
           element={
             <ProtectedRoute>
               <PatientCreatePage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =========================
+            ✅ EXPEDIENTE CLÍNICO
+        ========================= */}
+        <Route
+          path="/expediente"
+          element={
+            <ProtectedRoute>
+              <ClinicalRecordSelectPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId"
+          element={
+            <ProtectedRoute>
+              <PatientRecordPanelPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =========================
+            ✅ FORMULARIOS POR PACIENTE
+        ========================= */}
+        <Route
+          path="/expediente/:patientId/historia-clinica/nueva"
+          element={
+            <ProtectedRoute>
+              <HistoriaClinicaFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/nota-medica/nueva"
+          element={
+            <ProtectedRoute>
+              <NotaMedicaFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/preoperatoria/nueva"
+          element={
+            <ProtectedRoute>
+              <PreoperatoriaFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/transoperatoria/nueva"
+          element={
+            <ProtectedRoute>
+              <TransoperatoriaFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/postoperatoria/nueva"
+          element={
+            <ProtectedRoute>
+              <PostoperatoriaFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/indicaciones-ingreso/nueva"
+          element={
+            <ProtectedRoute>
+              <IndicacionesIngresoFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expediente/:patientId/laboratorios/imagen/nueva"
+          element={
+            <ProtectedRoute>
+              <LaboratoriosImagenFormPage />
             </ProtectedRoute>
           }
         />
